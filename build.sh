@@ -31,9 +31,9 @@ cat << 'EOF' > "$APP_DIR/Contents/Info.plist"
     <key>CFBundleIdentifier</key>
     <string>com.dixitprajapati.statementstudio</string>
     <key>CFBundleVersion</key>
-    <string>8.18</string>
+    <string>8.19</string>
     <key>CFBundleShortVersionString</key>
-    <string>8.18</string>
+    <string>8.19</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleSignature</key>
@@ -60,6 +60,6 @@ echo "APPL????" > "$APP_DIR/Contents/PkgInfo"
 codesign --force --deep --sign - "$APP_DIR"
 
 # Package zip
-ditto -c -k --sequesterRsrc --keepParent "$APP_DIR" "$DIR/Statement-Studio-8.18.zip"
+ditto -c -k --sequesterRsrc --keepParent "$APP_DIR" "$DIR/Statement-Studio-8.19.zip"
 
 echo "Done! Application ready at: $APP_DIR"

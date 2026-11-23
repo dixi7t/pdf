@@ -113,3 +113,16 @@ Some PDFs are only pictures: scans, phone photos, or files saved with *Microsoft
 Everything runs on this computer (Tesseract, English); nothing is uploaded. *Compress → Max* turns pages into pictures again, so it drops the text layer.
 
 Rebuild V8.18 from V8.17: `node studio/build/add-ocr.mjs <V8.17 index.html> index.html` (sources in `studio/build/ocr/`).
+
+---
+
+## 🆕 V8.19 — Scan to Word: turn a scan into an editable document
+
+**Edit PDFs → Edit › Scans → Scan to Word** saves the text of the open page, the picked pages, or all pages as a **new Word document (.docx)** you can edit freely in Word, Pages, LibreOffice or Google Docs.
+
+- Scanned / picture-only pages are read with OCR first (no need to run Recognize Text separately); pages that already have real text are read straight from the PDF.
+- Plain, editable text: Calibri 11 pt, line breaks and paragraph gaps kept, one page break between pages, sideways scans handled.
+- It's a retyped copy of the words, so pictures, logos, signatures and the original layout are not carried over. The first line notes where the text came from; delete it if you like.
+- Saved as `<name> (text).docx`. Everything runs on this computer.
+
+Rebuild V8.19 from V8.18: `node studio/build/add-docx.mjs <V8.18 index.html> index.html` (source: `studio/build/ocr/docx.js`).

@@ -120,7 +120,7 @@ html = P(html, 'OCR service',
       const top = Math.min(...ws.map((w) => w.bbox.y0)), bottom = Math.max(...ws.map((w) => w.bbox.y1));
       const bl = line.baseline && line.baseline.x1 > line.baseline.x0 && line.baseline.has_baseline !== false ? line.baseline : null;
       const baseAt = (x) => bl ? bl.y0 + (bl.y1 - bl.y0) * ((x - bl.x0) / (bl.x1 - bl.x0)) : bottom - (bottom - top) * 0.2;
-      lines.push({ words: ws.map((w) => {
+      lines.push({ top, bottom, words: ws.map((w) => {
         const ya = baseAt(w.bbox.x0), yb = baseAt(w.bbox.x1);
         const [x0, y0] = back(rot, w.bbox.x0, ya), [x1, y1] = back(rot, w.bbox.x1, yb);
         return { t: w.text, x0, y0, x1, y1, h: Math.max(4, (Math.max(ya, yb) - top) / 0.75), c: Math.round(w.confidence) };

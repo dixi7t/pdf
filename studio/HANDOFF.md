@@ -110,3 +110,10 @@ PdfCraft frame with `ss-ocr-result`. In the frame, `build/ocr/ocr.js` (`window.S
 (`src.ocr`: page index → words in PDF user space, or picture pixels for image sources) and, in `makeFile` after
 `SSFill.apply`, writes them as invisible Helvetica text (Tr 3, Tm per word, Tz to fit the word width). Edit Text already
 ignores invisible text, so recognized words aren't retypable. No network, no new libraries.
+
+## V8.19: Scan to Word
+`build/add-docx.mjs` turns V8.18 into V8.19 by injecting `build/ocr/docx.js` (`window.SSDocx`) after `ss-ocr` and adding a
+ribbon button (Edit › Scans). For each page: picture-only pages use the OCR lines stored by `SSOcr.ocrItem` (reading order,
+with top/bottom in the upright picture, now also returned by `__ssOcrWords`); text pages are grouped into lines from pdf.js
+text content. Lines become paragraphs (gap > 0.8 × median line height starts a new one; otherwise a line break), pages are
+separated by page breaks, and a minimal WordprocessingML package is zipped with the embedded JSZip. Text only, no images.

@@ -99,8 +99,10 @@
       const blob = await new Promise((r) => c.toBlob(r, "image/png"));
       const lines = await recognize(blob);
       const words = place(lines, it, c, vp);
+      // the text in reading order, for Scan to Word (top/bottom: pixels of the upright reading)
+      const text = lines.map((l) => ({ t: (l.words || []).map((w) => w.t.trim()).filter(Boolean).join(" "), top: l.top, bottom: l.bottom })).filter((l) => l.t);
       if (!it.src.ocr) it.src.ocr = new Map();
-      it.src.ocr.set(it.idx, { kind: it.src.kind, words, at: Date.now() });
+      it.src.ocr.set(it.idx, { kind: it.src.kind, words, lines: text, at: Date.now() });
       return words.length;
     } finally { c.width = c.height = 0; }
   }
@@ -209,6 +211,7 @@
     }
   }
   if (B.el) new MutationObserver(() => paintBadges()).observe(B.el, { childList: true });
+  document.addEventListener("ss-ocr-changed", () => paintBadges());
 
   /* ---------- Edit Text on a picture-only page: say why nothing is editable ---------- */
   if (MK && window.SSFill) {
@@ -231,5 +234,5 @@
     };
   }
 
-  window.SSOcr = { start, clear, apply, needsOcr, done };
+  window.SSOcr = { start, clear, apply, needsOcr, done, ocrItem, textChars, available };
 })();
