@@ -94,3 +94,22 @@ Digital signing happens last, after compression, and asks for the Digital ID's p
 Limits: a character missing from a PDF's embedded font subset is drawn in the closest standard font. Text in Type3 fonts or inside graphics objects can't be retyped (use Typewriter). Pages rebuilt by SSN masking can't keep text edits.
 
 Rebuild V8.17 from V8.16: `node studio/build/add-fill.mjs <V8.16 index.html> index.html` (sources in `studio/build/fill/`; `forge.bundle.js` is node-forge (BSD-3-Clause, see `LICENSE-forge.txt`), rebuilt with `make-forge-bundle.mjs`).
+
+---
+
+## 🆕 V8.18 — Recognize Text (OCR) for scanned and picture-only PDFs
+
+Some PDFs are only pictures: scans, phone photos, or files saved with *Microsoft Print to PDF* from an image. They have no real text, so **Edit Text** has nothing to retype and you can't search or copy anything.
+
+**Edit PDFs → Recognize Text** (ribbon: *Home › Tools* and *Edit › Scans*) reads those pages with the OCR engine already built into Statement Studio and adds an **invisible text layer** when you download the PDF:
+
+- The pages look exactly the same (the layer is invisible text, render mode 3).
+- In the downloaded PDF, the text can be **searched, selected and copied** in any viewer, and **Convert** reads it directly.
+- Works on PDF pages and on photos/images you add (JPG, PNG…). Sideways and upside-down scans are turned upright for reading.
+- Pages that already have real text are left alone. Runs on the open page, the picked pages, or all pages.
+- A green **Aa** badge marks pages with recognized text. **Remove Recognized Text** (*Edit › Scans*) takes it off again.
+- When **Edit Text** is used on a picture-only page, the hint explains why nothing can be retyped and offers Recognize Text. Recognized text is **not** retypable on purpose: it only makes a scan searchable and copyable; use **Typewriter** to add your own text on top.
+
+Everything runs on this computer (Tesseract, English); nothing is uploaded. *Compress → Max* turns pages into pictures again, so it drops the text layer.
+
+Rebuild V8.18 from V8.17: `node studio/build/add-ocr.mjs <V8.17 index.html> index.html` (sources in `studio/build/ocr/`).

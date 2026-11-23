@@ -100,3 +100,13 @@ Also in V8.17: `tools.js` (highlight/underline/strike-out, ink, stamps, signatur
 grid/rulers, Digital IDs; written as PDF annotations, page content and the outline), `ribbon.js` (the tabbed top bar),
 `sign.js` (wraps `makeFile` last, after compression: adds a /Sig field and fills /ByteRange + /Contents with a detached
 PKCS#7 made by node-forge, `forge.bundle.js`, BSD-3-Clause — add its licence notice when distributing).
+
+## V8.18: Recognize Text (OCR layer for picture-only pages)
+`build/add-ocr.mjs` turns the V8.17 `index.html` into V8.18. In the main page it exposes `window.__ssOcrWords(blob)` next to
+`getOcrWorker` (best built-in Tesseract model; tries 0/90/270/180° turns when the upright read is weak, scored with
+`ocrOrientationScore`, and maps word baselines back to the picture's own pixels) and answers `ss-ocr` messages from the
+PdfCraft frame with `ss-ocr-result`. In the frame, `build/ocr/ocr.js` (`window.SSOcr`) renders each picture-only page
+(pdf.js text content under 20 characters, or an image source) at 300 dpi, sends it for OCR, stores words on the source
+(`src.ocr`: page index → words in PDF user space, or picture pixels for image sources) and, in `makeFile` after
+`SSFill.apply`, writes them as invisible Helvetica text (Tr 3, Tm per word, Tz to fit the word width). Edit Text already
+ignores invisible text, so recognized words aren't retypable. No network, no new libraries.

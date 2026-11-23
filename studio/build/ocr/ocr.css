@@ -1,0 +1,15 @@
+/* Recognize text (V8.18) */
+.sheetbox { position: relative; }
+.ocr-badge {
+  position: absolute; left: 6px; bottom: 6px; z-index: 2;
+  font: 700 10px/1 system-ui, sans-serif; letter-spacing: .02em;
+  padding: 3px 5px; border-radius: 5px;
+  background: rgba(20, 120, 90, .92); color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .25); pointer-events: none;
+}
+.ocr-hint-btn {
+  font: inherit; font-weight: 600; cursor: pointer;
+  padding: 1px 8px; margin: 0 2px; border-radius: 6px;
+  border: 1px solid currentColor; background: transparent; color: inherit;
+}
+.ocr-hint-btn:hover { background: rgba(127, 127, 127, .15); }
