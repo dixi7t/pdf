@@ -117,3 +117,15 @@ ribbon button (Edit › Scans). For each page: picture-only pages use the OCR li
 with top/bottom in the upright picture, now also returned by `__ssOcrWords`); text pages are grouped into lines from pdf.js
 text content. Lines become paragraphs (gap > 0.8 × median line height starts a new one; otherwise a line break), pages are
 separated by page breaks, and a minimal WordprocessingML package is zipped with the embedded JSZip. Text only, no images.
+
+## V8.20: white-out, shapes, notes, pictures, export images, properties
+`build/add-extras.mjs` turns V8.19 into V8.20. It injects `build/extras/extras.{js,css}` (`window.SSX2`) before `ss-ribbon`, and
+patches `ss-tools` in a few places: `SSTools._k` shares the page-view helpers (geometry, selection, overlay, modal, appearance
+streams), `OWN` gets the new kinds (`wo`, `shape`, `note`, `img`, all stored in `item.annots`, so undo, move, Delete and moved areas
+already work), white-outs and shapes resize freely (pictures keep their aspect), and `writeAnnots` hands the new kinds to
+`SSX2.write`. White-outs are painted in a `buildPdf` wrapper (after edits and moved areas, before page numbers, typed text and
+comments). With text removal on, `SSX2.stripText` re-reads the page with `readText`, and every glyph whose centre lies in a box is
+replaced by a TJ kern of its exact advance (1- or 2-byte codes re-encoded as hex), so the remaining text keeps its position. Shapes
+are Square / Circle / Line annotations, notes are Text + Popup, pictures are form XObjects drawn into the page. Export Images
+renders `makeFile` output with PDF.js (no title, so it's never signed or compressed) and zips with JSZip. Document properties are
+set in the same `buildPdf` wrapper. The ribbon gets the new buttons; `SSX2.sub()` lights the right variant. No network, no new libraries.

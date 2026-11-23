@@ -126,3 +126,21 @@ Rebuild V8.18 from V8.17: `node studio/build/add-ocr.mjs <V8.17 index.html> inde
 - Saved as `<name> (text).docx`. Everything runs on this computer.
 
 Rebuild V8.19 from V8.18: `node studio/build/add-docx.mjs <V8.18 index.html> index.html` (source: `studio/build/ocr/docx.js`).
+
+---
+
+## 🆕 V8.20 — White-out, shapes, sticky notes, pictures, export as images, document properties
+
+| Feature | Where | What it does |
+|---|---|---|
+| **White-out** | *Home › Tools*, *Edit › Objects* | Drag a box to cover anything. Cover with **White**, **Match background** (takes the page's own colour around the box, so it disappears on tinted paper), **Black** or any **Colour**. **Remove the text underneath** (on by default) takes every letter under the box out of the PDF, so it can't be selected, copied or searched; the rest of the line doesn't move. Boxes can be moved, stretched (corner handle), deleted (Del) and undone. Use **Typewriter** to type on top: typed text always goes over the white-out. |
+| **Black-out** | *Protect › Redact* | The same tool set to black, with text removal always on. |
+| **Shapes** | *Comment › Shapes* | Rectangle, Ellipse, Line, Arrow; line colour, width and fill. Hold Shift for a square, circle or 45° line. Saved as real PDF comments (Square, Circle, Line). |
+| **Note** | *Comment › Text markup* | Click to drop a sticky note and type a comment (with your name). Saved as a real PDF note (Text + Popup) that Acrobat and Preview open on click. Double-click a note to edit it. |
+| **Image** | *Edit › Objects* | Choose a JPG/PNG/WebP/GIF picture or logo; it's placed in the middle of the page. Drag to move, corner to resize (keeps its shape). Click elsewhere to place it again. Drawn into the page. |
+| **Export Images** | *Home › Save*, *Organize › Document* | Save all pages, the picked pages or the open page as PNG or JPG at 72–300 dpi, with every edit, comment and stamp. Several pages come as one .zip. |
+| **Properties** | *Home › Save*, *Organize › Document* | Title, Author, Subject and Keywords written into the downloaded PDF. |
+
+Limits: text removal works on the page's own text (not text inside embedded graphics objects or pages rebuilt by *Move area*); pictures under a white-out are covered, not erased from the file. A letter is removed when its middle is inside the box.
+
+Rebuild V8.20 from V8.19: `node studio/build/add-extras.mjs <V8.19 index.html> index.html` (sources in `studio/build/extras/`).

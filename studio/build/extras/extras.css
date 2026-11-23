@@ -1,0 +1,11 @@
+/* ---- V8.20: white-out, shapes, notes, pictures, export, properties ---- */
+.x2-live{position:absolute;pointer-events:none;outline:1.5px dashed #6C3BFF;outline-offset:0;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
+.x2-svg{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}
+.fl-optbar [data-opts=wo] .seg label{white-space:nowrap}
+.fl-optbar input[type=color]{width:26px;height:20px;padding:0;border:1px solid var(--line);border-radius:5px;background:none;cursor:pointer;vertical-align:middle}
+.mk-view[data-tool=wo] .mk-paper,.mk-view[data-tool=shape] .mk-paper{cursor:crosshair}
+.mk-view[data-tool=note] .mk-paper,.mk-view[data-tool=img] .mk-paper{cursor:copy}
+.tl-obj.tl-wo.live:hover{outline-color:rgba(108,59,255,.9)}
+.tl-obj.tl-note{color:inherit;font-size:inherit}
+.tl-body textarea{padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);font:inherit;font-size:14px;resize:vertical;min-height:90px}
+.x2-exp .hint{margin:0}
