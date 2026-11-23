@@ -1,0 +1,74 @@
+/* ---- V8.17: edit text, fill forms, add text — in the PDF's own fonts ---- */
+.fl-layer{position:absolute;inset:0;pointer-events:none}
+.fl-item{position:absolute;pointer-events:auto}
+
+/* form fields: the page underneath is the real result; inputs show only while typing */
+.fl-field{box-sizing:border-box}
+.fl-field>input,.fl-field>textarea,.fl-field>select{box-sizing:border-box;display:block;width:100%;height:100%;margin:0;padding:0 2px;
+  border:1px solid rgba(60,95,215,.35);border-radius:2px;background:rgba(206,221,255,.28);color:transparent;caret-color:#111;
+  font-family:Helvetica,Arial,"Liberation Sans",sans-serif;outline:none;user-select:text;-webkit-user-select:text;cursor:text}
+.fl-field>textarea{resize:none;padding:2px;line-height:1.15;overflow:auto}
+.fl-field>select{cursor:pointer;padding:0 2px}
+.fl-field>select option{color:#111;background:#fff}
+.fl-field>:hover{border-color:rgba(60,95,215,.85);background:rgba(206,221,255,.4)}
+.fl-field>:focus{border-color:#6C3BFF;background:#fff;color:var(--ink,#111);box-shadow:0 0 0 2px rgba(108,59,255,.35)}
+.fl-field>:disabled{background:transparent;border-style:dashed;cursor:not-allowed}
+.fl-field.fl-done>:not(:focus){background:transparent;border-color:rgba(20,132,60,.45)}
+.fl-field>input[type=checkbox],.fl-field>input[type=radio]{appearance:none;-webkit-appearance:none;padding:0;cursor:pointer;background:transparent}
+.fl-field>input[type=radio]{border-radius:50%}
+.fl-field>input[type=checkbox]:focus,.fl-field>input[type=radio]:focus{background:transparent}
+
+/* existing text lines (Edit text) */
+.fl-line{border-radius:2px;cursor:text;outline:1px solid transparent;transition:outline-color .12s,background .12s}
+.mk-view.fl-emode .fl-line{outline-color:rgba(108,59,255,.18)}
+.fl-line:hover,.fl-line:focus-visible{outline:1.5px solid rgba(108,59,255,.8)!important;background:rgba(108,59,255,.07)}
+.fl-line.fl-edited{outline-color:rgba(20,132,60,.55)!important}
+.fl-line.fl-locked{cursor:not-allowed}
+.fl-line.fl-locked:hover{outline:1px dashed rgba(208,20,44,.7)!important;background:transparent}
+.fl-editor{z-index:5;display:flex;flex-direction:column}
+.fl-editor input{box-sizing:border-box;margin:0;padding:0 1px;border:0;border-radius:2px;background:#fff;outline:2px solid #6C3BFF;
+  box-shadow:0 6px 18px rgba(40,20,90,.25);line-height:1;user-select:text;-webkit-user-select:text;white-space:pre}
+.fl-edbar{display:flex;align-items:center;gap:6px;margin-top:6px;padding:4px 6px;border-radius:8px;background:var(--surface,#fff);color:var(--ink,#111);
+  border:1px solid var(--line,#ddd);box-shadow:0 4px 14px rgba(0,0,0,.2);font:600 11.5px/1.2 system-ui,sans-serif;white-space:nowrap;width:max-content}
+.fl-edbar span{color:var(--muted,#666);font-weight:600}
+.fl-edbar button{border:0;border-radius:6px;padding:3px 8px;font:700 11.5px system-ui,sans-serif;cursor:pointer;background:var(--sunk,#eee);color:var(--ink,#111)}
+.fl-edbar button[data-a=ok]{background:#6C3BFF;color:#fff}
+
+/* added text boxes: drawn into the page; the box shows the text only while typing */
+.fl-text{transform-origin:0 0}
+.fl-text textarea{display:block;box-sizing:content-box;margin:0;padding:0;border:0;background:transparent;resize:none;overflow:hidden;
+  white-space:pre;line-height:1.2;color:transparent;caret-color:var(--ink,#111);outline:1px dashed rgba(108,59,255,.55);outline-offset:2px;
+  user-select:text;-webkit-user-select:text;cursor:text;min-width:2ch}
+.fl-text textarea:focus{color:var(--ink,#111);background:rgba(255,255,255,.9)}
+.fl-text textarea::placeholder{color:rgba(108,59,255,.55)}
+.fl-text:not(:hover):not(:focus-within):not(.on) textarea:not(:placeholder-shown){outline-color:transparent}
+.fl-text:focus-within textarea,.fl-text.on textarea{outline:2px solid #6C3BFF}
+.fl-grip,.fl-x{position:absolute;top:-4px;width:18px;height:18px;border-radius:5px;display:grid;place-items:center;font:700 12px/1 system-ui,sans-serif;
+  opacity:0;transition:opacity .15s;border:0;padding:0;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.fl-grip{left:-24px;cursor:move;background:#6C3BFF;color:#fff;touch-action:none}
+.fl-x{right:-24px;cursor:pointer;background:#fff;color:#C2185B}
+.fl-text:hover .fl-grip,.fl-text:focus-within .fl-grip,.fl-text.on .fl-grip,.fl-text:hover .fl-x,.fl-text:focus-within .fl-x,.fl-text.on .fl-x{opacity:1}
+
+/* toolbar: one view, three tools */
+.fl-mode{min-width:280px;flex-wrap:wrap}
+.fl-mode label{white-space:nowrap}
+.fl-mode label:has(input:checked){background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.fl-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fl-tools select,.fl-tools input[type=number]{padding:4px 6px;border-radius:8px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);font:inherit;font-size:12.5px}
+.fl-tools select{max-width:210px}
+.fl-tools input[type=number]{width:64px}
+.mk-view:not([data-tool=mark]) .mk-tools .mk-style,.mk-view:not([data-tool=mark]) .mk-tools .mk-size:not(.fl-size),.mk-view:not([data-tool=mark]) .mk-tools .mk-colors:not(.fl-colors){display:none}
+.fl-optbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:7px 14px;background:var(--surface);border-bottom:1px solid var(--line);font-size:12.5px}
+.fl-optbar[hidden]{display:none}
+.fl-optbar>[data-opts]{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.fl-optbar>[data-opts][hidden]{display:none}
+.mk-view:not(.fl-tmode) .fl-tools{display:none}
+.mk-view.fl-tmode .mk-paper{cursor:text}
+.mk-view.fl-emode .mk-paper{cursor:default}
+
+/* page tiles */
+.flbadge{position:absolute;left:6px;top:6px;background:#1A3FB0;color:#fff;font-size:11px;font-weight:800;border-radius:999px;padding:1px 7px;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:2}
+.flbadge.ok{background:#14843C}
+.fl-line.fl-ft{outline-color:rgba(26,63,176,.35)}
+.mk-view.fl-emode .fl-line.fl-ft{outline:1px dashed rgba(26,63,176,.55)}
+.fl-editor textarea.fl-ft-ta{box-sizing:border-box;margin:0;padding:0 1px;border:0;border-radius:2px;background:#fff;outline:2px solid #6C3BFF;box-shadow:0 6px 18px rgba(40,20,90,.25);line-height:1.17;resize:none;overflow:hidden;white-space:pre;user-select:text;-webkit-user-select:text}
