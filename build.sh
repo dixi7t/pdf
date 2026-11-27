@@ -31,9 +31,9 @@ cat << 'EOF' > "$APP_DIR/Contents/Info.plist"
     <key>CFBundleIdentifier</key>
     <string>com.dixitprajapati.statementstudio</string>
     <key>CFBundleVersion</key>
-    <string>8.20</string>
+    <string>8.21</string>
     <key>CFBundleShortVersionString</key>
-    <string>8.20</string>
+    <string>8.21</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleSignature</key>
